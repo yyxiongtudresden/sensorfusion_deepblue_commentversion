@@ -169,8 +169,10 @@ git 学习：
      ８：冲突管理
      两个分支都提交了新的东西，用　git merge 会出现CONFLICT (content): Merge conflict in readme.txt
      Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容，我们修改成一样的后保存．
-
+    
+     最好不要在两个brnach中都提交新的东西．不然就会造成冲突．
 1１: 标签管理
         tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。
         
-newbranch
+newbranch newbarnch commit new thing
+
