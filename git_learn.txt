@@ -4,27 +4,28 @@ git 学习：
      设置相关信息　$ git config --global user.name "Your Name"
                 $ git config --global user.email "email@example.com
                 
-2:   创建版本库 版本库又名仓库，英文名repository.
+2:   创建仓库，英文名repository.
         理解成一个目录，这个目录里面的所有文件都可以被Git管理起来，每个文件的修改、删除，Git都能跟踪，以便任何时刻都可以追踪历史，或者在将来某个时刻可以“还原”。
         进入空目录　后　$ git init
                     　Initialized empty Git repository in /Users/michael/learngit/.git/
 
 ３：  把文件添加到版本库
-        $ git add readme.txt　　　//可以add多个文件，用空格分开
-        $ git commit -m "wrote a readme file"
+        $ git add readme.txt　　　//add 把文件添加到仓库，
+        $ git add . //将当前文件夹添加到git仓库中
+        $ git commit -m "wrote a readme file"　// commit 把文件提交到仓库
         [master (root-commit) eaadf4e] wrote a readme file
         1 file changed, 2 insertions(+)
         create mode 100644 readme.txt
         
-        add 把文件添加到仓库：
-        commit 把文件提交到仓库
-        
-3.1：  工作区(整个目录)－－＞和暂存区stage－－＞和当前分支beanch
-        第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+3.1：  工作区（working diretory）－－＞和暂存区（Stage）－－＞和当前分支beanch
+        工作区：包含你实际更改的文件，还包括当前修改但未add存入暂存区的文件变化信息
+        暂存区：临时存储文件的变化信息
+        第一步是用git add把文件添加进去，实际上就是把文件(或者修改)添加到暂存区；，暂存区中将记录file文件上的修改信息。
         第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+        ！！　commit：往往是有重大改变的版本或者是在一次修改工作整体完成之后才使用commit。而在这之间需要保存的修改，自然需要一个缓存区暂时存放。
         因为我们创建Git版本库时，Git自动为我们创建了唯一一个master分支，所以，现在，git commit就是往master分支上提交更改。
-        你可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。
         
+        你可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。
                 
 4:    git status  掌握仓库当前的状态,有哪些是被修改的（add以后），有哪些没有被提交（comment）
         $ git status
@@ -101,11 +102,10 @@ git 学习：
         第一次修改 -> git add -> 第二次修改 -> git add -> git commit  
                 就相当于把两次修改合并后一块提交了,每次修改，如果不用git add到暂存区，那就不会加入到commit中。
 
-
 7:  撤销修改
         １：
         没有git add过，只是增加了一些然后保存．Git会告诉你，git checkout -- file可以丢弃工作区的修改：
-        $ git checkout -- readme.txt
+        $ git checkout -- readme.txt　　
             种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
             一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
        　git checkout -- file命令中的--很重要，没有--，就变成了“切换到另一个分支”的命令，我们在后面的分支管理中会再次遇到git checkout命令。
@@ -119,7 +119,8 @@ git 学习：
         git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。
         然后再　git checkout -- readme.txt    
 
-8: 删除文件
+8: 删除git上的文件
+        进入文件夹，settings -- 拖到底　－－danger zone.
 
 9: git remote远程仓库的添加、查看、修改、删除
         1: add
