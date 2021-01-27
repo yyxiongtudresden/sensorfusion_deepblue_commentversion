@@ -1,3 +1,6 @@
 git remote add origin https://github.com/yyxiongtudresden/sensorfusion_deepblue_commentversion.git
 git branch -M main
 git push -u origin main
+
+删除了这个文件夹中的.git文件夹时，表示把所有有关git的信息全部删除，然后从新　git init && git add . ＆＆　git commit -m 然后再上传．
+这次试试ｐｃｄ会不会被上传．
