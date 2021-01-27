@@ -1,0 +1,123 @@
+git 学习：
+１：  安装　sudo apt-get install git
+     版本查看　git --version
+     设置相关信息　$ git config --global user.name "Your Name"
+                $ git config --global user.email "email@example.com
+                
+2:   创建版本库 版本库又名仓库，英文名repository.
+        理解成一个目录，这个目录里面的所有文件都可以被Git管理起来，每个文件的修改、删除，Git都能跟踪，以便任何时刻都可以追踪历史，或者在将来某个时刻可以“还原”。
+        进入空目录　后　$ git init
+                    　Initialized empty Git repository in /Users/michael/learngit/.git/
+
+３：  把文件添加到版本库
+        $ git add readme.txt　　　//可以add多个文件，用空格分开
+        $ git commit -m "wrote a readme file"
+        [master (root-commit) eaadf4e] wrote a readme file
+        1 file changed, 2 insertions(+)
+        create mode 100644 readme.txt
+        
+        add 把文件添加到仓库：
+        commit 把文件提交到仓库
+        
+3.1：  工作区(整个目录)－－＞和暂存区stage－－＞和当前分支beanch
+        第一步是用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+        第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+        因为我们创建Git版本库时，Git自动为我们创建了唯一一个master分支，所以，现在，git commit就是往master分支上提交更改。
+        你可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。
+        
+                
+4:    git status  掌握仓库当前的状态,有哪些是被修改的（add以后），有哪些没有被提交（comment）
+        $ git status
+        On branch master
+        Changes to be committed:
+            (use "git reset HEAD <file>..." to unstage)
+
+	            modified:   readme.txt
+	    上面的意思是：readme.txt被修改了，但是没有被提交，被保存在缓存区
+	    
+	    $ git commit -m "add distributed"
+        [master e475afc] add distributed
+        1 file changed, 1 insertion(+), 1 deletion(-)
+        上面的意思是，readme被提交到仓库，已经是一个新版本了．
+        
+        $ git status
+        On branch master
+        nothing to commit, working tree clean
+        没有东西在缓存区．
+	             
+５：   查看版本，版本退回　（让readme.txt变成不同时候修改的内容，HEAD 是一个指针）
+            $ git log　　//查看被提交的版本日志
+            commit 1094adb7b9b3807259d8cb349e7df1d4d6477073 (HEAD -> master)　//commit 版本号
+            Author: Michael Liao <askxuefeng@gmail.com>
+            Date:   Fri May 18 21:06:15 2018 +0800
+
+                 append GPL
+
+            commit e475afc93c209a690c39c13a46716e8fa000c366
+            Author: Michael Liao <askxuefeng@gmail.com>
+            Date:   Fri May 18 21:03:36 2018 +0800
+
+                   add distributed
+
+            commit eaadf4e385e865d25c48e7ca9c8395c3f7dfaef0
+            Author: Michael Liao <askxuefeng@gmail.com>
+            Date:   Fri May 18 20:59:18 2018 +0800
+
+                   wrote a readme file
+           
+      版本回滚
+               $ git reset --hard HEAD^
+               HEAD is now at e475afc add distributed
+                
+            $ git log　　//查看被提交的版本日志                
+            commit e475afc93c209a690c39c13a46716e8fa000c366
+            Author: Michael Liao <askxuefeng@gmail.com>
+            Date:   Fri May 18 21:03:36 2018 +0800
+
+                   add distributed
+
+            commit eaadf4e385e865d25c48e7ca9c8395c3f7dfaef0
+            Author: Michael Liao <askxuefeng@gmail.com>
+            Date:   Fri May 18 20:59:18 2018 +0800
+
+                   wrote a readme file
+                   
+      再变成　append GPL　版本
+            $ git reset --hard 1094a　　//1049a是　commit id号
+            HEAD is now at 83b0afe append GPL
+      
+      如果不知道版本号，用reflog查看，相当于history
+            $ git reflog
+            e475afc HEAD@{1}: reset: moving to HEAD^
+            1094adb (HEAD -> master) HEAD@{2}: commit: append GPL
+            e475afc HEAD@{3}: commit: add distributed
+            eaadf4e HEAD@{4}: commit (initial): wrote a readme file
+
+6:  修改管理
+        第一次修改 -> git add -> 第二次修改 -> git commit
+            Git管理的是修改，当你用git add命令后，在工作区的第一次修改被放入暂存区，准备提交，但是，在工作区的第二次修改并没有放入暂存区，所以，git commit只负责把暂存区的修改提交了，也就是第一次的修改被提交了，第二次的修改不会被提交。
+            
+        那怎么提交第二次修改呢？
+        第一次修改 -> git add -> 第二次修改 -> git add -> git commit  
+                就相当于把两次修改合并后一块提交了,每次修改，如果不用git add到暂存区，那就不会加入到commit中。
+
+
+7:  撤销修改
+        １：
+        没有git add过，只是增加了一些然后保存．Git会告诉你，git checkout -- file可以丢弃工作区的修改：
+        $ git checkout -- readme.txt
+            种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+            一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+       　git checkout -- file命令中的--很重要，没有--，就变成了“切换到另一个分支”的命令，我们在后面的分支管理中会再次遇到git checkout命令。
+        
+        ２：   
+        你不但写了一些胡话，还git add到暂存区了，用命令git reset HEAD <file>可以把暂存区的修改撤销掉（unstage），重新放回工作区：  
+        $ git reset HEAD readme.txt
+        Unstaged changes after reset:
+        M	readme.txt   
+        
+        git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。
+        然后再　git checkout -- readme.txt    
+
+8: 删除文件
+            
