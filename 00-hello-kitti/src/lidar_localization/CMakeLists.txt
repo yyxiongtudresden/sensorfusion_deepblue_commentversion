@@ -34,7 +34,12 @@ include(cmake/PCL.cmake)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 include(cmake/global_defination.cmake)
+
+# catkin_package这个命令是 Catkin 提供的一个宏，用于把 Catkin 的构建信息输出到构建系统中，用于生成 package 配置文件和 CMake 文件。
+# 必须在 add_library() 和 add_executable() 前调用
 catkin_package()
+
+
 file(GLOB_RECURSE ALL_SRCS "*.cpp")
 #message("GLOB_RECURSE ALL_SRCS  =${ALL_SRCS} ")
 file(GLOB_RECURSE NODE_SRCS "src/*_node.cpp")

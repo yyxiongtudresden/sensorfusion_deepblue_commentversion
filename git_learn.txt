@@ -141,5 +141,12 @@ git 学习：
         4:删除远程仓库  (感觉和３差不多)
         git remote remove　＂要删除的远程仓库名＂
         git remote remove test
-        
+
+
+10:  分支管理
+     1:查看所有本地分支　git branch  -->* master  当前分支前面会标一个*号。
+     ２：查看本地和远程仓库的所有分支　git branch -a
+     ３：添加一个分支（dev)，并转到这个分支　git checkout -b dev  ==  git branch dev && git checkout dev
+1１: 标签管理
+        tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。
         

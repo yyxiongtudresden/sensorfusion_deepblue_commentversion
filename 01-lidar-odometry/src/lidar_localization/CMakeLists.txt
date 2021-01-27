@@ -47,7 +47,7 @@ file(GLOB_RECURSE NODE_SRCS "src/*_node.cpp")
 list(REMOVE_ITEM ALL_SRCS ${NODE_SRCS})
 
 add_executable(front_end_node src/front_end_node.cpp ${ALL_SRCS})
-# 01新增
+# 01新增-
 # 定义target依赖的其他target，确保在编译本target之前，其他的target已经被构建。
 # 格式：ADD_DEPENDENCIES(target-namedepend-target1 depend-target2 ...)
 add_dependencies(front_end_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp)
