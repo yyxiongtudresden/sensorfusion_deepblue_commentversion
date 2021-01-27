@@ -120,4 +120,25 @@ git 学习：
         然后再　git checkout -- readme.txt    
 
 8: 删除文件
-            
+
+9: git remote远程仓库的添加、查看、修改、删除
+        1: add
+        git 查看远程仓库，以及与本地仓库的关系：git remote show origin
+        git remote add “远程仓库名”+空格+远端仓库链接   
+        git remote add origin https://github.com/yyxiongtudresden/sensorfusion_deepblue_commentversion.git  
+        远程仓库的名称一般默认为 origin（远程仓库的名称推荐使用默认的名称 origin ）,远端仓库的名称和你远端仓库的链接没有多大关联，只是一个代号而已。
+        
+        2: 查看
+        git remote　列出每个远程库的简短名字，在克隆完某个项目后，至少可以看到一个名为 origin 的远程库,，git 默认使用这个名字来标识你所克隆的原始仓库。
+        git remote -v  git remote -v 列出详细信息，在每一个名字后面列出其远程 url 。
+        git remote show origin　　//　git 查看远程仓库，以及与本地仓库的关系
+        
+        3:修改远程仓库的关联
+         git remote set-url origin ＂新的仓库链接＂ 命令，更新远程仓库的 url。
+         git remote set-url origin "https://github.com/yyxiongtudresden/TEST.git"
+
+        4:删除远程仓库  (感觉和３差不多)
+        git remote remove　＂要删除的远程仓库名＂
+        git remote remove test
+        
+        
