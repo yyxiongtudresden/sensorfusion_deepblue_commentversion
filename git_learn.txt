@@ -144,20 +144,33 @@ git 学习：
 
 
 10:  分支管理
-     1:查看所有本地分支　git branch  -->* master  当前分支前面会标一个*号。
+     1:查看所有本地分支　git branch  当前分支前面会标一个*号。
      ２：查看本地和远程仓库的所有分支　git branch -a
-     ３：添加一个分支（dev)，并转到这个分支　git checkout -b dev  ==  git branch dev && git checkout dev
-     4: 切换分支　git checkout xxx ,在这个分支修改的东西和其它分支无关
-     
+     ３：创建一个分支（dev)，并转到这个分支　git switch -c dev  ==  git branch dev && git switch dev　　
+        
+     4: 切换到已有分支　git checkout xxx ,在这个分支修改的东西和其它分支无关
+                git switch xxx　　　Git的switch命令是2.23版本发布的新命令
+　     
      因为创建、合并和删除分支非常快，所以Git鼓励你使用分支完成某个任务，合并后再删掉分支，这和直接在master分支上工作效果是一样的，但过程更安全。
      ５: 在分支中修改后将它融入主分支　　
            git add xxxx  && git commit -m "" && git merge 当前分支名，
            这样就把当前分支的东西修改到主分支中了． 
      ６: 删除分支　git branch -d xxx
+     
+     经常会有冲突，不能将branch上的东西merge到main中．
+     Git merge reports “Already up-to-date” though there is a difference
+     https://stackoverflow.com/questions/634546/git-merge-reports-already-up-to-date-though-there-is-a-difference
+     git checkout master
+     git reset --hard test
+     
+     ７: 分支查看／管理
+     gitk --simplify-by-decoration --all
+     
+     ８：冲突管理
+     两个分支都提交了新的东西，用　git merge 会出现CONFLICT (content): Merge conflict in readme.txt
+     Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容，我们修改成一样的后保存．
+
 1１: 标签管理
         tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起。
         
-add some comments in test branch and i hope it can merge to main branch successfully
-        
-        test branch and change to main branchssss
-        change at 1501d
+newbranch
