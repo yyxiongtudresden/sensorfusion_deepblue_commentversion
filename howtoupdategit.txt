@@ -8,4 +8,6 @@ git push -u origin main
 
 这次试试ｐｃｄ会不会被上传．不上传pcd应该将它所在文件夹的.gitignore中添加＂　*.pcd＂这一行
 
+然后要上传和下载直接用　　git push 和　git pull　搞定，因为已经配置好了，会自动连接到git的仓库．
 
+如果用git clone　xxxx　的话，会在当前文件夹生成一个新的文件夹，而不是同步信息，而gitclone是一个对于所有公开的git仓库都实用的命令．
