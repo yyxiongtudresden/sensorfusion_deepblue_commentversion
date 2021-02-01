@@ -5,6 +5,9 @@ data_path: /workspace/assignments/01-lidar-odometry/src/lidar_localization   # �
 registration_method: NDT   # 选择点云匹配方法，目前支持：ICP, NDT
 
 # 局部地图
+
+# 由于小地图滤波和当前帧滤波采用的格子大小不一样，所以类内为这两个功能各定义了一个滤波器
+
 key_frame_distance: 2.0 # 关键帧距离
 local_frame_num: 20
 local_map_filter: voxel_filter # 选择滑窗地图点云滤波方法，目前支持：voxel_filter

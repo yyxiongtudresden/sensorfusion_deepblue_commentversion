@@ -21,9 +21,13 @@ void GNSSData::UpdateXYZ() {
     if (!origin_position_inited) {
         LOG(WARNING) << "GeoConverter has not set origin position";
     }
+    // 将经纬度转化成xyz
     geo_converter.Forward(latitude, longitude, altitude, local_E, local_N, local_U);
 }
 
+
+//  synced 同步的
+// 通过插值完成时间同步，即找到需要同步时刻的前后的两个数据进行插值，插值原理和loam是一样的，线性插值。
 bool GNSSData::SyncData(std::deque<GNSSData>& UnsyncedData, std::deque<GNSSData>& SyncedData, double sync_time) {
     // 传感器数据按时间序列排列，在传感器数据中为同步的时间点找到合适的时间位置
     // 即找到与同步时间相邻的左右两个数据

@@ -24,6 +24,12 @@ class GNSSData {
     int service = 0;
 
   private:
+
+    //静态成员变量必须在类外初始化
+    // 两个相同类型的对象 a、b，它们都有一个成员变量 m_name
+    // 那么修改 a.m_name 的值不会影响 b.m_name 的值。
+    // 可是有时候我们希望在多个对象之间共享数据--> 静态成员变量
+    // static 成员变量属于类，不属于某个具体的对象，即使创建多个对象，也只为 m_total 分配一份内存 
     static GeographicLib::LocalCartesian geo_converter;
     static bool origin_position_inited;
 

@@ -12,6 +12,9 @@
 namespace lidar_localization {
 class CloudData {
   public:
+    //  利用pcl的点云库文件
+    //　CLOUD_PTR　= CLOUD::Ptr = pcl::PointCloud<POINT>::Ptr = pcl::PointCloud< pcl::PointXYZ>::Ptr
+    //  CLOUD_PTR　= pcl::PointCloud< pcl::PointXYZ>::Ptr
     using POINT = pcl::PointXYZ;
     using CLOUD = pcl::PointCloud<POINT>;
     using CLOUD_PTR = CLOUD::Ptr;

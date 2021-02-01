@@ -21,6 +21,9 @@ void GNSSData::UpdateXYZ() {
     if (!origin_position_inited) {
         LOG(WARNING) << "GeoConverter has not set origin position";
     }
+    // GeographicLib  1.51 中的介绍
+    // Convert from geodetic to local cartesian coordinates and return rotation matrix.
+    // 从大地坐标转换为局部笛卡尔坐标并返回旋转矩阵。 
     geo_converter.Forward(latitude, longitude, altitude, local_E, local_N, local_U);
 }
 

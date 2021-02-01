@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
 )
 
-# 01新增
+#　新增了一个service用来保存map
 add_service_files(
    FILES
    saveMap.srv

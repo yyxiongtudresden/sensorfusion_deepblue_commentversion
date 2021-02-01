@@ -13,6 +13,9 @@ GNSSSubscriber::GNSSSubscriber(ros::NodeHandle& nh, std::string topic_name, size
     subscriber_ = nh_.subscribe(topic_name, buff_size, &GNSSSubscriber::msg_callback, this);
 }
 
+
+//  nav_sat_fix_ptr这个是哪里来的？
+//  应该是上面 topic_name中指定的ros topic，按照NavSatFixConstPtr的格式读取信息并赋赋值给gnssdata
 void GNSSSubscriber::msg_callback(const sensor_msgs::NavSatFixConstPtr& nav_sat_fix_ptr) {
     GNSSData gnss_data;
     gnss_data.time = nav_sat_fix_ptr->header.stamp.toSec();
@@ -21,7 +24,8 @@ void GNSSSubscriber::msg_callback(const sensor_msgs::NavSatFixConstPtr& nav_sat_
     gnss_data.altitude = nav_sat_fix_ptr->altitude;
     gnss_data.status = nav_sat_fix_ptr->status.status;
     gnss_data.service = nav_sat_fix_ptr->status.service;
-
+    // .hpp std::deque<GNSSData> new_gnss_data_;
+    // new_gnss_data_ 是一个储存未使用过的gnss数据的容器deque
     new_gnss_data_.push_back(gnss_data);
 }
 

@@ -4,7 +4,6 @@
  * @Date: 2020-02-05 02:56:27
  */
 #include <memory>
-
 #include <ros/ros.h>
 #include "glog/logging.h"
 
@@ -14,8 +13,11 @@
 
 using namespace lidar_localization;
 
+// global variable
 bool save_map = false;
 
+// 查看srv文件夹，里面有saveMap的request和response 定义
+// 参考　胡春旭　<ros 开发实践>　3.7 服务中的Server和Client
 bool save_map_callback(saveMap::Request &request, saveMap::Response &response) {
     save_map = true;
     response.succeed = true;
@@ -30,10 +32,11 @@ int main(int argc, char *argv[]) {
     ros::init(argc, argv, "front_end_node");
     ros::NodeHandle nh;
 
-    // register service save_map:
+    // register service save_map: 增加这个sevice，需要在terminal中 source 一下才能用。
     ros::ServiceServer service = nh.advertiseService("save_map", save_map_callback);
 
     // register front end processing workflow:
+    // 这个就是整个前端的进程入口
     std::shared_ptr<FrontEndFlow> front_end_flow_ptr = std::make_shared<FrontEndFlow>(nh);
 
     // process rate: 10Hz
@@ -41,7 +44,8 @@ int main(int argc, char *argv[]) {
 
     while (ros::ok()) {
         ros::spinOnce();
-
+        // 只要node在运行，前端就在run，如果接收到调用savemap的信息就save并且发布map
+        // front end workflow就是这三个pub的函数，其他都是private函数
         front_end_flow_ptr->Run();
 
         if (save_map) {

@@ -2,6 +2,8 @@
  * @Description: NDT 匹配模块
  * @Author: Ren Qian
  * @Date: 2020-02-08 21:46:45
+ * 匹配类NDTRegistration内部主要函数为SetInputTarget和ScanMatch
+ * 作用分别是输入目标点云和执行点云匹配，并输出匹配后位姿。
  */
 #include "lidar_localization/models/registration/ndt_registration.hpp"
 
@@ -48,12 +50,17 @@ bool NDTRegistration::SetInputTarget(const CloudData::CLOUD_PTR& input_target) {
     return true;
 }
 
+
+// 
 bool NDTRegistration::ScanMatch(const CloudData::CLOUD_PTR& input_source, 
                                 const Eigen::Matrix4f& predict_pose, 
                                 CloudData::CLOUD_PTR& result_cloud_ptr,
                                 Eigen::Matrix4f& result_pose) {
     ndt_ptr_->setInputSource(input_source);
+
+
     ndt_ptr_->align(*result_cloud_ptr, predict_pose);
+    // Get the final transformation matrix estimated by the registration method. 
     result_pose = ndt_ptr_->getFinalTransformation();
 
     return true;

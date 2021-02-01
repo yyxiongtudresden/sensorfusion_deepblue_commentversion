@@ -36,14 +36,19 @@ bool IMUData::SyncData(std::deque<IMUData>& UnsyncedData, std::deque<IMUData>& S
             return false;
         }
         // UnsyncedData.at(1).time - sync_time should be <= 0.2
+        // 插值的左右两个值需要足够近
         if (UnsyncedData.at(1).time - sync_time > 0.2) {
             return false;
         }
         break;
     }
+
+
     if (UnsyncedData.size() < 2)
         return false;
 
+    // 通过在　sync_time　前后的两个imu数据拟合出sync_time时刻的数据　synced_data
+    // 简单的等比例放大数据
     IMUData front_data = UnsyncedData.at(0);
     IMUData back_data = UnsyncedData.at(1);
     IMUData synced_data;

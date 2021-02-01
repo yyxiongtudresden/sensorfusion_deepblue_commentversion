@@ -15,6 +15,9 @@ TFListener::TFListener(ros::NodeHandle& nh, std::string base_frame_id, std::stri
 bool TFListener::LookupData(Eigen::Matrix4f& transform_matrix) {
     try {
         tf::StampedTransform transform;
+        // 寻找两个frame之间的 transform.
+        // 变换保存在transform中 ,它的类型为StampedTransform
+        // tf::StampedTransform是ros里代表TF变换的数据类型,一般在机器人上读取雷达坐标系到机器人坐标系的信息就是通过读取tf信息
         listener_.lookupTransform(base_frame_id_, child_frame_id_, ros::Time(0), transform);
         TransformToMatrix(transform, transform_matrix);
         return true;

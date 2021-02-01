@@ -21,7 +21,8 @@ OdometryPublisher::OdometryPublisher(ros::NodeHandle& nh,
 void OdometryPublisher::Publish(const Eigen::Matrix4f& transform_matrix) {
     odometry_.header.stamp = ros::Time::now();
 
-    //set the position
+    //　set the position
+    //　参看nav_msgs/Odometry Message定义
     odometry_.pose.pose.position.x = transform_matrix(0,3);
     odometry_.pose.pose.position.y = transform_matrix(1,3);
     odometry_.pose.pose.position.z = transform_matrix(2,3);

@@ -22,9 +22,11 @@ class NDTRegistration: public RegistrationInterface {
                    Eigen::Matrix4f& result_pose) override;
   
   private:
+    // 设置ndt的匹配参数
     bool SetRegistrationParam(float res, float step_size, float trans_eps, int max_iter);
 
   private:
+    //  首先定义一个ndt匹配方法的对象，记得初始化它
     pcl::NormalDistributionsTransform<CloudData::POINT, CloudData::POINT>::Ptr ndt_ptr_;
 };
 }

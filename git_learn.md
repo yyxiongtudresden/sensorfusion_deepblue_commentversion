@@ -1,6 +1,8 @@
 # git 学习 笔记　(2020 01 26)：
 
-
+<center>
+<img src="gitpic&book/Screenshot from 2021-02-01 10-26-21.png" alt="Terminator" width="８0%">
+</center>
 ---
 ## １：  安装　sudo apt-get install git
 
@@ -147,7 +149,7 @@ Date:   Fri May 18 20:59:18 2018 +0800
 reset 做的第一件事是移动 HEAD 的指向。 这与改变 HEAD 自身不同（checkout 所做的）；reset 移动 HEAD 指向的分支。 这意味着如果 HEAD 设置为 master 分支（例如，你正在 master 分支上）， 运行 git reset 9e5e6a4 将会使 master 指向 9e5e6a4。
 
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 11-01-35.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 11-01-35.png" alt="Terminator" width="50%">
 <div>图：　本地git的关系</div>
 </center>
 
@@ -162,7 +164,7 @@ reset 做的第一件事是移动 HEAD 的指向。 这与改变 HEAD 自身不�
 接下来，reset 会用 HEAD 指向的当前快照的内容来更新索引。
 
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 11-05-45.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 11-05-45.png" alt="Terminator" width="50%">
 <div>图：　本地git的关系</div>
 </center>
 
@@ -174,7 +176,7 @@ reset 做的第一件事是移动 HEAD 的指向。 这与改变 HEAD 自身不�
 
 reset 要做的的第三件事情就是让工作目录看起来像索引。 **如果使用 --hard 选项**，它将会**继续**这一步。
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 11-07-38.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 11-07-38.png" alt="Terminator" width="50%">
 <div>图：　本地git的关系</div>
 </center>
 
@@ -239,12 +241,12 @@ eaadf4e HEAD@{4}: commit (initial): wrote a readme file
  它还有 取消暂存文件 的实际效果。 如果我们查看该命令的示意图，然后再想想 git add 所做的事，就会发现它们正好相反。
 
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 11-22-32.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 11-22-32.png" alt="Terminator" width="50%">
 <div>图：　本地git的关系</div>
 </center>
 
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 11-23-11.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 11-23-11.png" alt="Terminator" width="50%">
 <div>图：　本地git的关系</div>
 </center>
 
@@ -283,7 +285,7 @@ Unstaged changes after reset:
 M	readme.txt   
 ```    
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 11-22-32.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 11-22-32.png" alt="Terminator" width="50%">
 <div>图：　本地git的关系</div>
 </center>  
 
@@ -390,7 +392,7 @@ git branch -a
 ### ３：创建一个分支（dev)，并转到这个分支
 前提：
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 13-23-59.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 13-23-59.png" alt="Terminator" width="50%">
 <div>一个简单提交历史</div>
 </center>
 
@@ -415,7 +417,7 @@ $ vim index.html
 $ git commit -a -m 'added a new footer [issue 53]'
 ```
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 13-31-46.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 13-31-46.png" alt="Terminator" width="50%">
 <div>iss53 分支随着工作的进展向前推进</div>
 </center>
 
@@ -450,7 +452,7 @@ $ git commit -a -m 'fixed the broken email address'
  1 file changed, 2 insertions(+)
  ```
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 13-37-41.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 13-37-41.png" alt="Terminator" width="50%">
 <div>基于 master 分支的紧急问题分支 hotfix branch</div>
 </center>
 
@@ -472,7 +474,7 @@ Fast-forward
  ```
 你应该注意到了“快进（**fast-forward**）” 这个词。 由于你想要合并的分支 hotfix 所指向的提交 C4 是你所在的提交 C2 的直接后继， 因此 Git 会直接将指针向前移动。换句话说，当你试图合并两个分支时， 如果顺着一个分支走下去能够到达另一个分支，那么 Git 在合并两者的时候， **只会简单的将指针向前推进（指针右移）**，因为这种情况下的合并操作没有需要解决的分歧——这就叫做 “快进（fast-forward）”。
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 13-40-34.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 13-40-34.png" alt="Terminator" width="50%">
 <div>master 被快进到 hotfix</div>
 </center>
 
@@ -499,7 +501,7 @@ $ git commit -a -m 'finished the new footer [issue 53]'
 1 file changed, 1 insertion(+)
 ```
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 13-42-49.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 13-42-49.png" alt="Terminator" width="50%">
 <div>继续在 iss53 分支上的工作</div>
 </center>
 
@@ -526,13 +528,13 @@ index.html |    1 +
 ```
 这和你之前合并 hotfix 分支的时候看起来有一点不一样。 在这种情况下，你的开发历史从一个更早的地方开始分叉开来（diverged）。 因为，master 分支所在提交并不是 iss53 分支所在提交的直接祖先，Git 不得不做一些额外的工作。 出现这种情况的时候，Git 会使用两个分支的末端所指的快照（C4 和 C5）以及这两个分支的公共祖先（C2），做一个简单的三方合并
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 13-53-22.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 13-53-22.png" alt="Terminator" width="50%">
 <div> 一次典型合并中所用到的三个快照(这是合并之前)</div>
 </center>
 
 和之前将分支指针向前推进所不同的是，Git 将此次三方合并的结果做了一个新的快照并且自动创建一个新的提交指向它。 这个被称作一次合并提交，它的特别之处在于他有不止一个父提交。
 <center>
-<img src="gitpic&book/Screenshot from 2021-01-29 14-00-15.png" alt="Terminator" width="80%">
+<img src="gitpic&book/Screenshot from 2021-01-29 14-00-15.png" alt="Terminator" width="50%">
 <div> 一个合并提交</div>
 </center>
 

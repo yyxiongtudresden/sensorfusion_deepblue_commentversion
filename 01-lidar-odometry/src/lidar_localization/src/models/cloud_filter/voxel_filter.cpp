@@ -1,5 +1,6 @@
 /*
  * @Description: voxel filter 模块实现
+ * 滤波类VoxelFilter内部主要函数就是Filter，这个函数参数同时包含输入和输出。
  * @Author: Ren Qian
  * @Date: 2020-02-09 19:53:20
  */
@@ -34,7 +35,15 @@ bool VoxelFilter::SetFilterParam(float leaf_size_x, float leaf_size_y, float lea
 }
 
 bool VoxelFilter::Filter(const CloudData::CLOUD_PTR& input_cloud_ptr, CloudData::CLOUD_PTR& filtered_cloud_ptr) {
+    // 继承了基类pcl::PCLBase< PointT > Class
+    // Provide a pointer to the input dataset.
+    // 传入PCLBase 的　protected attributes  input_ (The input point cloud dataset. )
+    // PCLPointCloud2ConstPtr pcl::PCLBase< pcl::PCLPointCloud2 >::input_
     voxel_filter_.setInputCloud(input_cloud_ptr);
+    
+    //  pcl::VoxelGrid 继承(inherited)了　基类　pcl::Filter　这个filter　是在　基类中定义的
+    // void pcl::Filter< PointT >::filter 	( 	PointCloud &  	output	)
+    // Calls the filtering method and returns the filtered dataset in output. 
     voxel_filter_.filter(*filtered_cloud_ptr);
 
     return true;

@@ -28,6 +28,33 @@ class OdometryPublisher {
     ros::NodeHandle nh_;
     ros::Publisher publisher_;
     nav_msgs::Odometry odometry_;
+/*
+  nav_msgs::Odometry
+    std_msgs/Header header
+    string child_frame_id
+   *geometry_msgs/PoseWithCovariance pose
+    geometry_msgs/TwistWithCovariance twist
+  
+  geometry_msgs/PoseWithCovariance pose
+   *geometry_msgs/Pose pose
+    float64[36] covariance
+ 
+  geometry_msgs/Pose pose 
+   *geometry_msgs/Point position
+   *geometry_msgs/Quaternion orientation
+  
+  geometry_msgs/Point position
+    float64 x
+    float64 y
+    float64 z
+
+  geometry_msgs/Quaternion orientation
+    float64 x
+    float64 y
+    float64 z
+    float64 w
+*/
+
 };
 }
 #endif
