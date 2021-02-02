@@ -128,29 +128,32 @@ bool FrontEnd::InitFilter(std::string filter_user, std::shared_ptr<CloudFilterIn
 }
 
 bool FrontEnd::Update(const CloudData& cloud_data, Eigen::Matrix4f& cloud_pose) {
-    // 要加一个位姿矩阵，所以要从新对行的frame结构体赋值一下
+    // Frame 关键帧结构体，其实就是在点云基础上加了个位姿矩阵，所以要从新对行的frame结构体赋值一下
     current_frame_.cloud_data.time = cloud_data.time;
     
     //　把cloud_data去除NaN值以后赋值到current_frame_中
     // pcl::removeNaNFromPointCloud(laserCloudIn, laserCloudIn, indices)
     // Removes points with x, y, or z equal to NaN, 函数有三个参数，分别为输入点云，输出点云及对应保留的索引。
     // current_frame_.cloud_data.cloud_ptr 输出点云的指针
+    // 也就是说，current_frame_这个Frame对象完整了，有数据也有时间．
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*cloud_data.cloud_ptr, *current_frame_.cloud_data.cloud_ptr, indices);
 
-    //　新建一个指向滤波后点云的指针
+    //　新建一个指向滤波后点云的空指针
     CloudData::CLOUD_PTR filtered_cloud_ptr(new CloudData::CLOUD());
 
     // pcl中的voxel_filter，它的基本原理就是把三维空间划分成等尺寸的立方体格子，在一个立方体格子内最多只留一个点，这样就起到稀疏作用
     // VoxelFilter::Filter(const CloudData::CLOUD_PTR& input_cloud_ptr, CloudData::CLOUD_PTR& filtered_cloud_ptr) 
     frame_filter_ptr_->Filter(current_frame_.cloud_data.cloud_ptr, filtered_cloud_ptr);
 
-    // 新建几个静态pose，init_pose_　也是单位矩阵
+    // 静态局部变量pose，init_pose_　也是单位矩阵
+    //　静态局部变量保存在全局数据区，而不是保存在栈中，每次的值保持到下一次调用，直到下次赋新值。 
     static Eigen::Matrix4f step_pose = Eigen::Matrix4f::Identity();
+    // init_pose_ 在每一次迭代时候会改变么？　不会
     static Eigen::Matrix4f last_pose = init_pose_;
     static Eigen::Matrix4f predict_pose = init_pose_;
+    std::cout << "this is FrontEnd::Update.cpp \n this is matix init_pose_ \n"<< predict_pose << std::endl;
     static Eigen::Matrix4f last_key_frame_pose = init_pose_;
-
     // 局部地图容器中没有关键帧，代表是第一帧数据
     // 此时把当前帧数据作为第一个关键帧，并更新局部地图容器和全局地图容器
     if (local_map_frames_.size() == 0) {
@@ -159,15 +162,13 @@ bool FrontEnd::Update(const CloudData& cloud_data, Eigen::Matrix4f& cloud_pose) 
         cloud_pose = current_frame_.pose;
         return true;
     }
-
-    // 不是第一帧，就正常匹配
-    // 用指定方法ndt 或者　icp 来进行点云匹配，返回值是current_frame_.pose
+    // 不是第一帧，就正常匹配 用指定方法ndt 或者　icp 来进行点云匹配，返回值是current_frame_.pose
     registration_ptr_->ScanMatch(filtered_cloud_ptr, predict_pose, result_cloud_ptr_, current_frame_.pose);
     cloud_pose = current_frame_.pose;
 
     // 更新相邻两帧的相对运动
-    step_pose = last_pose.inverse() * current_frame_.pose;　// current 这一帧减去原来那一帧的结果，current和前面一帧的距离．
-    // 猜测两帧之间的速度不变，给一个相对有效的预测值
+    step_pose = last_pose.inverse() * current_frame_.pose; // current 这一帧减去原来那一帧的结果，current和前面一帧的距离．
+    // 猜测两帧之间的速度不变，给一个相对有效的预测值,给下一次用　但是这个变量会被删除，下一次都是用initpose TODO
     predict_pose = current_frame_.pose * step_pose;
     last_pose = current_frame_.pose;
 

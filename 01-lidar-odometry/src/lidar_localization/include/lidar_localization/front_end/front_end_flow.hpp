@@ -28,17 +28,16 @@ class FrontEndFlow {
   public:
     FrontEndFlow(ros::NodeHandle& nh);
 
-    // 正常情况下，run
+      // 正常情况下，run
     bool Run();
     // 调用service情况下执行这两个
     bool SaveMap();
     bool PublishGlobalMap();
 
   private:
-  　//  FrontEndFlow 构造函数中使用
+    //  FrontEndFlow 构造函数中使用
     bool InitSubscribers(ros::NodeHandle& nh, const YAML::Node& config_node);
-　　
-　　// Run 中使用到的
+    // Run 中使用到的
     bool ReadData();
     bool InitCalibration();
     bool InitGNSS();
@@ -47,8 +46,9 @@ class FrontEndFlow {
     bool UpdateGNSSOdometry();
     bool UpdateLaserOdometry();
     bool PublishData();
-
-  　// 不知道在哪里
+    bool SaveTrajectory();
+    
+// 不知道在哪里
     bool anime();
 
   private:
@@ -58,7 +58,6 @@ class FrontEndFlow {
     std::shared_ptr<TFListener> lidar_to_imu_ptr_;
     std::shared_ptr<IMUSubscriber> imu_sub_ptr_;
     std::shared_ptr<GNSSSubscriber> gnss_sub_ptr_;
-    
 
     // publisher
     std::shared_ptr<CloudPublisher> cloud_pub_ptr_;
@@ -79,18 +78,15 @@ class FrontEndFlow {
     CloudData current_cloud_data_;
     IMUData current_imu_data_;
     GNSSData current_gnss_data_;
-
     // 在cloud_data.hpp中可以通过递推知
     // CLOUD_PTR　= pcl::PointCloud< pcl::PointXYZ>::Ptr
     // pcl 官方: 
     // using pcl::PointCloud< PointT >::Ptr = shared_ptr<PointCloud<PointT>>
     // Returns: shared pointer to the copy of the cloud 
-    
     // 指向点云的指针
     CloudData::CLOUD_PTR local_map_ptr_;
     CloudData::CLOUD_PTR global_map_ptr_;
     CloudData::CLOUD_PTR current_scan_ptr_;
-
     // 4*4的单位矩阵
     Eigen::Matrix4f laser_odometry_ = Eigen::Matrix4f::Identity();
     Eigen::Matrix4f gnss_odometry_ = Eigen::Matrix4f::Identity();

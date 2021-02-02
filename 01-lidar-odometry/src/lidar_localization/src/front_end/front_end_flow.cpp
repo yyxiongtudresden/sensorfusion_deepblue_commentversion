@@ -46,35 +46,36 @@ FrontEndFlow::FrontEndFlow(ros::NodeHandle& nh) {
 bool FrontEndFlow::Run() {
     // 正常 if内都是 !true = false
     // 有问题就 return false
-    if (!ReadData()) {　　// 读取数据并将数据imu 和 gnss数据同步到　点云　数据所在的时间点
-        return false;    // 如果是init还要将deque的front数据做一下同时，把不同时的数据pop
+    if (!ReadData()) {  // 读取数据并将数据imu 和 gnss数据同步到　点云　数据所在的时间点
+        return false;   // 如果是init还要将deque的front数据做一下同时，把不同时的数据pop掉
     }
         
-    if (!InitCalibration())  {　// 根据输入的　frames 名称计算出   Eigen::Matrix4f　lidar_to_imu_
+    if (!InitCalibration()) {  // 根据输入的　frames 名称计算出   Eigen::Matrix4f　lidar_to_imu_
         return false;           // 使用一次，因为 calibration_received = true;
     }
 
 
     if (!InitGNSS()) {  // 将gnss坐标init 通过操作geo_converter
-        return false; 　// 使用一次，因为 gnss_inited = true;
+        return false;   // 使用一次，因为 gnss_inited = true;
     }
 
-    while(HasData()) {　　// 如果　每种传感器的deque中都有数据，进行下面的循环
+    while(HasData()) {  // 如果　每种传感器的deque中都有数据，进行下面的循环
        
         // while 循环，如果用数据就不断的进行　update gnss 和　laser的　odo 
 
-        if (!ValidData()) {　//　如果检测知道　deque 中的数据时间是同步，后将数据取出来
-            continue;        // 放到current_xxx_data_ 里面　
-        }
+        if (!ValidData()) { //　如果检测知道　deque 中的数据时间是同步，后将数据取出来
+            continue;       // 放到current_xxx_data_ 里面　
+        }                   // 　ValisDara返回fause 代表有数据被丢弃，！fause = true, 不做下面的Update . Pub Save等操作，再次循环，然后判断
             
-        UpdateGNSSOdometry();　// 用gnss提供rigid transform中的t , 而　imu 提供旋转举证R
-                               //　得到的是针对这一时刻跟新过的　gnss_odometry_　是gnss相对原点的pose
-                               //　这里将gnss当做ground truth
+        UpdateGNSSOdometry();   // 用gnss提供rigid transform中的t , 而　imu 提供旋转举证R
+                                //　得到的是针对这一时刻跟新过的　gnss_odometry_　是gnss相对原点的pose
+                                //　这里将gnss当做ground truth
        
-        if (UpdateLaserOdometry()) {　　// 这是前端的核心，这是核心，这是核心，用front_end_ptr_　指向的函数实现
-                                       // 是一个bool函数，如果返回true 就是没有问题，将信息发布到指定的topic上
-            PublishData();      　// 将当前帧点云和localmap ，在滤波后，发送到指定的　rostopic中
-            SaveTrajectory();　　// 不断地将laser_odometry 和　gnss_odometry_的数据输入　txt文本中
+        if (UpdateLaserOdometry()) {    // 这是前端的核心，这是核心，这是核心，用front_end_ptr_　指向的函数实现
+                                        // 是一个bool函数，如果返回true 就是没有问题，将信息发布到指定的topic上
+                                        // Updata这个函数主要就是跟新laser_odometry_　这个值他是一个rigid transform ,用　pub 和save 发布和保存这个值
+            PublishData();          // 将当前帧点云和localmap ，在滤波后，发送到指定的　rostopic中
+            SaveTrajectory();       // 不断地将laser_odometry 和　gnss_odometry_的数据输入　txt文本中
         } else {
             LOG(INFO) << "UpdateLaserOdometry failed!" << std::endl;
         }
@@ -135,7 +136,7 @@ bool FrontEndFlow::ReadData() {
         // 如果在同步时候出现错误，将会丢弃这一帧的点云信息并且用LOG记录
         // 这是在数据开头时候做的检测，怕数据记录的时候不是同时开始的．
         // 只在最初做一次，因为数据在deque中的最front的元素已同时
-        if (!valid_imu || !valid_gnss) {　//　逻辑或
+        if (!valid_imu || !valid_gnss) {//逻辑或
             LOG(INFO) << "Validity check: " << std::endl
                       << "IMU: " << valid_imu << ", "
                       << "GNSS: " << valid_gnss << std::endl;
@@ -238,19 +239,20 @@ bool FrontEndFlow::UpdateLaserOdometry() {
 
     laser_odometry_ = Eigen::Matrix4f::Identity();
     // update 是核心．
+    // 输入currentscan ，更新　laser_odometry_　矩阵　并且用UpdateWithNewFrame更新local map
     return front_end_ptr_->Update(current_cloud_data_, laser_odometry_);
 }
 
 bool FrontEndFlow::PublishData() {
     // 发布odo信息到指定的topic
-    laser_odom_pub_ptr_->Publish(laser_odometry_);　// laser_odom topic
+    laser_odom_pub_ptr_->Publish(laser_odometry_);  // laser_odom topic
     gnss_pub_ptr_->Publish(gnss_odometry_);         // gnss topic
     // 调用了filter 类　，将当前帧点云取出来并进行滤波
     front_end_ptr_->GetCurrentScan(current_scan_ptr_);
     // 将点云current_scan_ptr_发布到指定的topic_name中
     // 这里是"current_scan"
     cloud_pub_ptr_->Publish(current_scan_ptr_);
-　　// 同样调用了filter 类　，将local_map_ptr_点云取出来并进行滤波
+    // 同样调用了filter 类　，将local_map_ptr_点云取出来并进行滤波
     if (front_end_ptr_->GetNewLocalMap(local_map_ptr_))
         local_map_pub_ptr_->Publish(local_map_ptr_);
 
