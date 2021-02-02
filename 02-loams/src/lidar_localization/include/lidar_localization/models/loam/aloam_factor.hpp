@@ -37,12 +37,17 @@ struct LidarEdgeFactor
 		//Eigen::Quaternion<T> q_last_curr{q[3], T(s) * q[0], T(s) * q[1], T(s) * q[2]};
 		Eigen::Quaternion<T> q_last_curr{q[3], q[0], q[1], q[2]};
 		Eigen::Quaternion<T> q_identity{T(1), T(0), T(0), T(0)};
+		// 考虑运动补偿，但是kitti点云已经补偿过所以可以忽略下面对四元数slerp插值以及对平移的线性插值
 		q_last_curr = q_identity.slerp(T(s), q_last_curr);
 		Eigen::Matrix<T, 3, 1> t_last_curr{T(s) * t[0], T(s) * t[1], T(s) * t[2]};
 
+
 		Eigen::Matrix<T, 3, 1> lp;
+		// Odom 进程时，下面将当前帧Lidar坐标系下的cp点转化到上一帧的雷达坐标系下，然后在上一帧的坐标系中计算残差距离
+		//　mapping 下面是将当前帧Lidar坐标系下的cp点转化到world坐标系下，然后在world坐标系下计算点到线的距离
 		lp = q_last_curr * cp + t_last_curr;
 
+		//　点到线的距离是这样算的　nu de分别是分母和分子
 		Eigen::Matrix<T, 3, 1> nu = (lp - lpa).cross(lp - lpb);
 		Eigen::Matrix<T, 3, 1> de = lpa - lpb;
 
