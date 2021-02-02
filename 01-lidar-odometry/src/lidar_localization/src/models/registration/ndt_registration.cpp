@@ -45,6 +45,8 @@ bool NDTRegistration::SetRegistrationParam(float res, float step_size, float tra
 }
 
 bool NDTRegistration::SetInputTarget(const CloudData::CLOUD_PTR& input_target) {
+    // Provide a pointer to the input target
+    // void pcl::Registration< PointSource, PointTarget, Scalar >::setInputTarget 	( 	const PointCloudTargetConstPtr &  	cloud	) 	
     ndt_ptr_->setInputTarget(input_target);
 
     return true;
@@ -56,9 +58,11 @@ bool NDTRegistration::ScanMatch(const CloudData::CLOUD_PTR& input_source,
                                 const Eigen::Matrix4f& predict_pose, 
                                 CloudData::CLOUD_PTR& result_cloud_ptr,
                                 Eigen::Matrix4f& result_pose) {
+    // Provide a pointer to the input source (e.g., the point cloud that we want to align to the target) 
+    // void pcl::Registration< PointSource, PointTarget, Scalar >::setInputSource 	( 	const PointCloudSourceConstPtr &  	cloud	) 	
     ndt_ptr_->setInputSource(input_source);
 
-
+    // 这里的ndt_ptr包含了两个点云，一个是currentscan另一个是localmap
     ndt_ptr_->align(*result_cloud_ptr, predict_pose);
     // Get the final transformation matrix estimated by the registration method. 
     result_pose = ndt_ptr_->getFinalTransformation();

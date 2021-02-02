@@ -236,6 +236,7 @@ bool FrontEnd::UpdateWithNewFrame(const Frame& new_key_frame) {
     if (local_map_frames_.size() < 10) {
 
         //更新指针，指针指向　新的帧将要匹配的local map 他也是一个点云
+        // 重要！ 这是更新局部的localmap，让registration_ptr_->ScanMatch 中的 SetInputSource 有东西对比
         registration_ptr_->SetInputTarget(local_map_ptr_);
     } else {
         CloudData::CLOUD_PTR filtered_local_map_ptr(new CloudData::CLOUD());
